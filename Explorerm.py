@@ -990,6 +990,15 @@ class Explorer:
         oracle = mean(oracle_scores) if oracle_scores else 0
         return 0.5 * gui + 0.5 * oracle
 
+    def __getstate__(self):
+        state = self.__dict__.copy()        
+        del state['runner']
+        return state
+    
+    def __setstate__(self, state):        
+        self.__dict__.update(state)        
+        self.runner = None
+
     def snapshot(self):
         with open(os.path.join(SNAPSHOT_FOLDER, self.config.id + '.pkl'), 'wb') as f:
             pickle.dump(self, f)
